@@ -1,48 +1,11 @@
-import { useEffect, useState } from 'react';
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { useRef, useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useTasks } from '../hooks/useTasks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import TaskAreaList from '../components/TaskAreaList';
 
 const HomeScreen: React.FC = () => {
-  const { tasks, addTask, addTasks } = useTasks();
+  const { tasks, addTask, deleteTask } = useTasks();
   const [task, setTask] = useState<string>('');
-
-  const saveTasks = async () => {
-    try {
-      await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const loadTasks = async () => {
-    try {
-      const tasks = await AsyncStorage.getItem('tasks');
-      console.log(tasks);
-      if (tasks) {
-        addTasks(JSON.parse(tasks) as string[]);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // taskが変更されたらsaveTasksを呼び出す
-  useEffect(() => {
-    saveTasks();
-  }, [tasks]);
-
-  // コンポーネントがマウントされたらloadTasksを呼び出す
-  useEffect(() => {
-    loadTasks();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -54,11 +17,7 @@ const HomeScreen: React.FC = () => {
         placeholder="Enter a task"
       />
       <Button title="Add Task" onPress={() => addTask(task)} />
-      <FlatList
-        data={tasks}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <Text style={styles.task}>{item}</Text>}
-      />
+      <TaskAreaList tasks={tasks} onDelete={deleteTask} />
     </View>
   );
 };
@@ -72,7 +31,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-  task: { fontSize: 18, marginTop: 10 },
 });
 
 export default HomeScreen;

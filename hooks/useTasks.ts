@@ -13,5 +13,9 @@ export const useTasks = () => {
     setTasks(prev => [...prev, ...tasks]);
   };
 
-  return { tasks, addTask, addTasks };
+  const deleteTask = (index: number) => {
+    setTasks(prev => prev.filter((_, i) => i !== index));
+  };
+
+  return { tasks, addTask, addTasks, deleteTask };
 };
