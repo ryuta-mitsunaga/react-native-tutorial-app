@@ -1,15 +1,20 @@
 import { useState } from 'react';
 
-export const useTasks = () => {
-  const [tasks, setTasks] = useState<string[]>([]);
+export type Task = {
+  title: string;
+  date: Date;
+};
 
-  const addTask = (task: string) => {
+export const useTasks = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const addTask = (task: Task) => {
     if (task) {
       setTasks(prev => [...prev, task]);
     }
   };
 
-  const addTasks = (tasks: string[]) => {
+  const addTasks = (tasks: Task[]) => {
     setTasks(prev => [...prev, ...tasks]);
   };
 
