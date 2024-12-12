@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Task } from '../hooks/useTasks';
 import { useMemo } from 'react';
+import { Task } from '../context/TasksContext';
 
 type Props = {
   task: Task;

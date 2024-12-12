@@ -1,25 +1,26 @@
 import { FlatList } from 'react-native';
 import TaskArea from './TaskArea';
-import { Task } from '../hooks/useTasks';
+import { TasksContext } from '../context/TasksContext';
+import { useContext } from 'react';
 
 type Props = {
-  tasks: Task[];
-
   // emit
   onDelete: (index: number) => void;
   onPress: (index: number) => void;
 };
 
 const TaskAreaList: React.FC<Props> = props => {
+  const tasks = useContext(TasksContext);
+
   return (
     <FlatList
-      data={props.tasks}
+      data={tasks}
       keyExtractor={(_, index) => index.toString()}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <TaskArea
           task={item}
-          onDelete={() => props.onDelete(index)}
-          onPress={() => props.onPress(index)}
+          onDelete={() => props.onDelete(item.id)}
+          onPress={() => props.onPress(item.id)}
         />
       )}
     />

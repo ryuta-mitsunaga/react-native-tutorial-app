@@ -1,9 +1,5 @@
 import { useState } from 'react';
-
-export type Task = {
-  title: string;
-  date: Date;
-};
+import { Task } from '../context/TasksContext';
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -18,8 +14,8 @@ export const useTasks = () => {
     setTasks(prev => [...prev, ...tasks]);
   };
 
-  const deleteTask = (index: number) => {
-    setTasks(prev => prev.filter((_, i) => i !== index));
+  const deleteTask = (taskId: number) => {
+    setTasks(prev => prev.filter((_, i) => i !== taskId));
   };
 
   return { tasks, addTask, addTasks, deleteTask };

@@ -131,6 +131,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="EditTask" component={EditTask} />
       </Stack.Navigator>
     </NavigationContainer>
   );
