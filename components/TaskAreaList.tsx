@@ -1,6 +1,6 @@
 import { FlatList } from 'react-native';
 import TaskArea from './TaskArea';
-import { TasksContext } from '../context/TasksContext';
+import { TasksContext } from '../context/FooterInfoContext';
 import { useContext } from 'react';
 
 type Props = {

@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useMemo } from 'react';
-import { Task } from '../context/TasksContext';
+import { Task } from '../context/FooterInfoContext';
 
 type Props = {
   task: Task;

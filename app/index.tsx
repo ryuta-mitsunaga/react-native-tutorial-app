@@ -1,89 +1,72 @@
-import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Task, Text, TextInput, View } from 'react-native';
-import { useTasks } from '../hooks/useTasks';
-import TaskAreaList from '../components/TaskAreaList';
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
-import { TasksContext } from '../context/TasksContext';
-import { router } from 'expo-router';
-import { TaskRequest, useTaskRepository } from '../hooks/useTaskRepository';
+import { StyleSheet, View } from 'react-native';
+import FooterBar from '../components/FooterBar';
+import MainContent from '../components/MainContent';
+import {
+  FOOTER_ITEM_ENUM,
+  FooterInfoContext,
+} from '../context/FooterInfoContext';
+import { useFooterInfo } from '../hooks/useFooterInfo';
+import { useTaskRepository } from '../hooks/useTaskRepository';
 
 const index: React.FC = () => {
-  const { tasks, addTask, deleteTask } = useTasks();
-  const [task, setTask] = useState<string>('');
-  const [date, setDate] = useState(new Date());
-
+  const { footerInfo, selectMenu } = useFooterInfo();
   const { getTasks, createTask } = useTaskRepository();
 
-  const onChangeDateTimePicker = (
-    _: DateTimePickerEvent,
-    selectedDate?: Date
-  ) => {
-    if (selectedDate) {
-      setDate(selectedDate);
-    }
+  const onSelectMenu = (menu: FOOTER_ITEM_ENUM) => {
+    const selectMenuFunc = selectMenu.get(menu);
+
+    if (selectMenuFunc) selectMenuFunc();
   };
 
-  const gotToEditTask = (taskId: number) => {
-    router.push(`./editTask/${taskId}`);
-  };
+  // const onChangeDateTimePicker = (
+  //   _: DateTimePickerEvent,
+  //   selectedDate?: Date
+  // ) => {
+  //   if (selectedDate) {
+  //     setDate(selectedDate);
+  //   }
+  // };
 
-  useEffect(() => {
-    getTasks().then(res => {
-      res.forEach(task => {
-        addTask(task);
-      });
-    });
-  }, []);
+  // const gotToEditTask = (taskId: number) => {
+  //   router.push(`./editTask/${taskId}`);
+  // };
 
-  const onClickAddTask = (task: TaskRequest) => {
-    createTask(task).then(res => {
-      addTask(res);
-    });
-  };
+  // useEffect(() => {
+  //   getTasks().then(res => {
+  //     res.forEach(task => {
+  //       addTask(task);
+  //     });
+  //   });
+  // }, []);
+
+  // const onClickAddTask = (task: TaskRequest) => {
+  //   createTask(task).then(res => {
+  //     addTask(res);
+  //   });
+  // };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Task Manager</Text>
-      <View style={{ flexDirection: 'row' }}>
-        <DateTimePicker
-          value={date}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          onChange={onChangeDateTimePicker}
-          locale="ja-JP"
-        />
+      <FooterInfoContext.Provider value={footerInfo}>
+        <View style={styles.mainContent}>
+          <MainContent />
+        </View>
 
-        <TextInput
-          style={styles.input}
-          value={task}
-          onChangeText={setTask}
-          placeholder="Enter a task"
-        />
-        <Button
-          title="Add Task"
-          onPress={() => onClickAddTask({ title: task, date })}
-        />
-      </View>
-      <TasksContext.Provider value={tasks}>
-        <TaskAreaList onDelete={deleteTask} onPress={gotToEditTask} />
-      </TasksContext.Provider>
+        <FooterBar onSelectMenu={onSelectMenu} />
+      </FooterInfoContext.Provider>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
+  },
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
-    flex: 2,
-    marginLeft: 8,
+  mainContent: {
+    marginBottom: 80,
   },
 });
 

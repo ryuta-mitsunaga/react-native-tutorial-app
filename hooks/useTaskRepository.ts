@@ -1,4 +1,4 @@
-import { Task } from '../context/TasksContext';
+import { Task } from '../context/FooterInfoContext';
 // import { useBaseRepository } from './useBaseRepository';
 
 export type TaskRequest = Omit<Task, 'id'>;
